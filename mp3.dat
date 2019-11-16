@@ -1,0 +1,251 @@
+************************
+****    ECE 5362    ****
+****Machine Problem 3***
+*****  Liangyu Liu *****
+*****  Haiyang Qi  *****
+*** Start fetch Cycle ***
+ st=0 rt='[pc]->mar' imar rac=1 rn=3
+ st=1 rt='[[mar]]-> mdr' read
+ st=2 rt='[mdr]->ir' omdr iir
+ st=3 rt='[pc]+1->q' rac=1 rn=3 ib p1 oadder
+ st=4 rt='[q]->pc' oq wac=1 wn=3
+
+*** branch  *** 
+  cond='ir158' value=0  nst=5
+
+  cond='ir1512'  cond='ir108' value=6 nst=200	 
+  cond='ir1512' cond='ir64' value=1 nst=27    
+  cond='ir1512' cond='ir108' value=1 nst=23 
+  cond='ir1512'  cond='ir64' value=2 nst=31
+  cond='ir1512'  cond='ir108' value=2 nst=40
+  cond='ir1512' cond='ir64' value=3 nst=140
+  cond='ir1512'  cond='ir108' value=3 nst=147
+  cond='ir1512' cond='ir64' value=4 nst=155
+  cond='ir1512' cond='ir108' value=4 nst=165
+  cond='ir1512'  cond='ir108' value=5 nst=250
+  cond='ir1512'  cond='ir64' value=5 nst=274
+  cond='ir1512'  cond='ir64' value=0 nst=20 
+
+  nst=10
+                    
+  st=5 rt='' it1 
+   cond='ir76' value=0 nst=10
+*** BHI  *** 
+ cond='ir5' value=1 nst=398
+
+*** BEQ BNE BPL BMI BLS*** 
+ cond='ir5' value=0 nst=399  
+ nst=0 
+*** If any instruction are present except Halt or Add, a halt will occur. ***
+*** HALT excution cycle ***
+ st=10 halt
+
+*** ADD Rk Rk ***
+ st=20 rt='[src]->t3' rac=2  it3
+ st=21 rt='[dst]->t2' rac=3 it2
+       nst=80
+
+*** ADD (Rk) Rk ***
+ st=23 rt = '[src]-> mar' rac=2  imar
+ st=24 rt='[dst]->t2' rac=3 it2
+ st=25 rt='[[mar]]->mdr' read
+ st=26 rt='[mdr]->t3' omdr it3
+ 	nst=80 
+
+** ADD Rk (Rk) **
+ st=27 rt='[src]->t3' rac=2 it3	
+ st=28 rt='[dst]->mar' rac=3  imar
+ st=29 rt='[[mar]]->mdr' read
+ st=30 rt='[mdr]->t2' omdr it2
+	nst=100
+
+** ADD Rk (Rk)+ **
+ st=31 rt='[src]->t3' rac=2 it3
+ st=32 rt='[dst]->mar' rac=3 imar
+ st=33 rt='[[mar]]->mdr' read
+ st=34 rt='q=[dst]+1' rac=3 ib oadder p1 newc newv
+ st=35 rt='[q]->dst' oq wac=3  newz newn
+ st=36 rt='[mdr]->t2' omdr it2
+ 	nst=100
+
+** ADD (Rk)+ Rk **
+ st=40 rt='[src]->mar' rac=2  imar
+ st=41 rt='[dst]->t2' rac=3 it2
+ st=42 rt='[[mar]]->mdr' read
+ st=43 rt='q=[src]+1' rac=2 ib oadder p1 newc newv
+ st=44 rt='[q]->src' oq wac=2  newz newn
+ st=45 rt='[mdr]->t3' omdr it3
+ 	nst=80
+
+** [T3] + [T2] -> dst **
+ 
+ st=80 rt='[t2]->t1' ot2 it1
+       cond='ir1512' value=1 nst=83
+       cond='ir1512' value=5 nst=87
+       cond='ir1512' value=6 nst=88
+       cond='ir1512' value=3 nst=94
+       cond='ir1512' value=4 nst=94
+ st=81 rt='-[t3] + 1->q' ot3 ib comp p1 oadder newc newv
+ st=82 rt='[q] -> [t3]' oq it3 newz newn
+ st=83 rt='[t1]+[t3]=q' oa ot3 ib oadder newc newv
+ st=84 rt='' newz newn
+       cond='c' value=1 nst=85
+       cond='c' value=0 nst=86
+ st=85 rt='c=0' clrc 
+       nst=93
+ st=86 rt='c=1' setc 
+       nst=93
+ st=87 rt='[t2] || [t3] -> q' ot2 ot3 ib oadder newc newv
+       cond='ir1512' value=5 nst=93
+       cond='ir1512' value=6 nst=92
+ st=88 rt='-[t3]-> q' ot3 ib comp oadder newc newv 
+ st=89 rt='[q]-> t3' oq it3 newz newn
+ st=90 rt='-[t2]->q' ot2 ib comp oadder newc newv
+ st=91 rt='[q] -> t2' oq it2 newz newn
+       nst=87
+ st=92 rt='-[q]->q' oq ib comp oadder newc newv	
+ st=93 rt='[q]-> dst' oq wac=3  newz newn
+	 nst=0
+ st=94 rt='[t3]->dst' ot3 wac=3 newn newz
+        cond='ir1512' value=3 nst=0
+        cond='ir118' value=0 nst=97
+ st=95 rt='[t2]->mdr' ot2 imdr newz newn
+ st=96 rt='[mdr]->[mar]' write
+        nst=0       
+ st=97 rt='[t2]->src' ot2 wac=2 newn newz
+        nst=0
+
+** subtraction maybe the only problem right now is the flags **
+** [T2] + [T3] -> [dst] **
+ st=100 rt='[t2]->t1' ot2 it1
+       cond='ir1512' value=1 nst=103
+       cond='ir1512' value=5 nst=107
+       cond='ir1512' value=6 nst=108
+       cond='ir1512' value=3 nst=115
+       cond='ir1512' value=4 nst=115
+ st=101 rt='-[t3] + 1->q' ot3 ib comp p1 oadder newc newv
+ st=102 rt='[q] -> [t3]' oq it3 newz newn
+ st=103 rt='[t1]+[t3]=q' oa ot3 ib oadder newc newv
+ st=104 rt='' newz newn 
+        cond='c' value=1 nst=105
+        cond='c' value=0 nst=106
+ st=105 rt='c=0' clrc 
+        nst=113
+ st=106 rt='c=1' setc 
+        nst=113
+ st=107 rt='[t3] || [t2]-> q' ot2 ot3 ib oadder newc newv
+       cond='ir1512' value=5 nst=113
+       cond='ir1512' value=6 nst=112
+ st=108 rt='-[t3]-> q' ot3 ib comp oadder newc newv 
+ st=109 rt='[q]-> t3' oq it3 newz newn
+ st=110 rt='-[t2]->q' ot2 ib comp oadder newc newv
+ st=111 rt='[q] -> t2' oq it2 newz newn
+       nst=107
+ st=112 rt='-[q]->q' oq ib comp oadder newc newv	
+ st=113 rt='[q]-> mdr' imdr oq newz newn
+ st=114 rt='[mdr]-> [dst]' write 
+	 nst=0
+ st=115 rt='[t3]-> mdr' imdr ot3 newz newn
+ st=116 rt='[mdr]->[dst]' write
+         cond='ir1512' value=3 nst=0
+ st=117 rt='[t2]->src' ot2 wac=2 newz newn
+        nst=0
+
+
+** ADD Rk -(Rk) ** 
+ st=140 rt='[src]->t3' rac=2 it3
+ st=141 rt='[dst]->t1'rac=3 it1
+ st=142 rt='[t1]-1->q' oa oadder comp newc newv
+ st=143 rt='[q]->mar' oq  imar newz newn
+
+ st=144 rt='[[mar]]->mdr' read
+ st=145 rt='[mdr]->t2' omdr it2
+ st=146 rt='q->dst' wac=3 oq
+	nst=100
+
+** ADD -(Rk) Rk **
+ st=147 rt='[src]->t1'rac=2 it1
+ st=148 rt='[t1]-1->q' oa oadder comp newc newv
+ st=149 rt='[q]->mar' oq  imar newz newn
+ st=150 rt='[dst]->t2' rac=3 it2
+ st=151 rt='[[mar]]->mdr' read
+ st=152 rt='[mdr]->t3' omdr it3
+ st=153 rt='q->src' wac=2 oq
+	nst=80
+
+**ADD Rk n(Rk) **
+ st=155 rt='[src]->t3' rac=2 it3
+ st=156 rt='[dst]->t1' rac=3 it1
+ st=157 rt='[pc]->mar' imar rac=1 rn=3
+ st=158 rt='[[mar]]-> mdr' read
+ st=159 rt='[pc]+1->q' rac=1 rn=3 ib p1 oadder newc newv
+ st=160 rt='[q]->pc' oq wac=1 wn=3 newz newn
+ st=161 rt='[t1]+[mdr]->q' omdr ib oadder oa newc newv
+ st=162 rt='[q]->mar' imar oq newz newn
+ st=163 rt='[[mar]]-> mdr' read
+ st=164 rt='[mdr]->t2' omdr it2
+	nst=100
+
+** ADD n(Rk) Rk ** 
+ st=165 rt='[src]->t1' rac=2 it1
+ st=166 rt='[dst]->t2' rac=3 it2
+ st=167 rt='[pc]->mar' imar rac=1 rn=3
+ st=168 rt='[[mar]]-> mdr' read
+ st=169 rt='[pc]+1->q' rac=1 rn=3 ib p1 oadder newc newv
+ st=170 rt='[q]->pc' oq wac=1 wn=3 newz newn
+ st=171 rt='[t1]+[mdr]->q' omdr ib oadder oa newc newv
+ st=172 rt='[q]->mar' imar oq newz newn
+ st=173 rt='[[mar]]-> mdr' read
+ st=174 rt='[mdr]->t3' omdr it3
+	nst=80
+
+*** Imm***
+ st=200 rt='[dst]-> t2' rac=3 it2
+ st=201 rt='[pc]->mar' imar rac=1 rn=3
+ st=202 rt='[[mar]]-> mdr' read
+ st=203 rt='[pc]+1->q' rac=1 rn=3 ib p1 oadder newc newv
+ st=204 rt='[q]->pc' oq wac=1 wn=3 newz newn
+ st=205 rt='[mdr]->t3' omdr it3
+	cond='ir64' value=5 nst=275
+	cond='ir64' value=4 nst=156
+	cond='ir64' value=3 nst=141
+	cond='ir64' value=2 nst=32
+	cond='ir64' value=1 nst=28
+	 nst=80
+
+*** ADD n Rk ***
+ st=250 rt='[pc]->mar' imar rac=1 rn=3
+ st=251 rt='[[mar]]-> mdr' read
+ st=252 rt='[pc]+1->q' rac=1 rn=3 ib p1 oadder newc newv
+ st=253 rt='[q]->pc' oq wac=1 wn=3 newz newn
+ st=254 rt='[dst]->t2' rac=3 it2
+ st=255 rt='[mdr]->mar' omdr imar
+ st=256 rt='[[mar]]-> mdr' read
+ st=257 rt='[mdr]->t3' omdr it3
+ 	 nst=80 
+
+** ADD Rk n **
+ st=274 rt='[src]->t3' rac=2 it3
+ st=275 rt='[pc]->mar' imar rac=1 rn=3
+ st=276 rt='[[mar]]-> mdr' read
+ st=277 rt='[pc]+1->q' rac=1 rn=3 ib p1 oadder newc newv
+ st=278 rt='[q]->pc' oq wac=1 wn=3 newz newn
+ st=279 rt='[mdr]->mar' imar omdr
+ st=280 rt='[[mar]]-> mdr' read
+ st=281 rt='[mdr]->t2' omdr it2
+	 nst=100
+
+*** [PC] + offset -> PC***
+ st=398 rt='' ib
+ cond='ibrch' value=0  nst=400
+ nst=0
+ st=399 rt='' ib
+ cond='ibrch' value=1  nst=400
+ nst=0
+ st=400 rt='[pc]->q' rac=1 rn=3 ib  oadder
+ st=401 rt='[q]->mar [q]->t1' oq imar it1
+ st=402 rt='[mar]->mdr' read
+ st=403 rt='[mdr]+[t1]+1=q' oa p1 omdr ib oadder
+ st=404 rt='[q]->pc' oq wac=1 wn=3 
+ 	 nst=0
+
