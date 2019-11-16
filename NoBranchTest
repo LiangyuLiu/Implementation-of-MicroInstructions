@@ -1,0 +1,112 @@
+********  test 1     
+FFF9	 AC
+0005	 X
+0009	 SP
+0000	 PC
+0000	 CVZN
+2600	 sub #4 ac	
+0004
+0091	 branch bmi
+0001	 offset = 1
+5001	 ac or x
+6601	 #FFF8 (1...1000) and x
+FFF8
+0092	 brach beq
+0002	 offset =2
+1204	 add (x)+ ac
+00BA	 branch bhi
+4501	 exg [10] x
+0010
+3500	 move [10] ac
+0010
+0000 	 halt
+8100	 16:
+
+********  test 2     
+FFF9	 AC
+0005	 X
+0009	 SP
+0000	 PC
+0000	 CVZN
+2001	 sub ac x
+0000
+********  test 3     
+0000	 AC
+2101	 X
+0009	 SP
+0000	 PC
+0000	 CVZN
+2101	 sub (ac) x
+0000
+********  test 4     
+2101	 AC
+0000	 X
+0009	 SP
+0000	 PC
+0000	 CVZN
+2011	 sub ac (x)
+0000
+********  test 5     
+0000	 AC
+2101	 X
+0009	 SP
+0000	 PC
+0000	 CVZN
+3201	 mov (ac)+ x
+0000
+********  test 6    
+2101	 AC
+0000	 X
+0009	 SP
+0000	 PC
+0000	 CVZN
+3011	 mov ac (x)
+0000
+********  test 7     
+0001	 AC
+2101	 X
+0009	 SP
+0000	 PC
+0000	 CVZN
+4301	 exg -(ac) x
+0000
+********  test 8     
+2101	 AC
+0000	 X
+0009	 SP
+0000	 PC
+0000	 CVZN
+4011	 exg ac (x)
+0000
+********  test 9     
+0000	 AC
+2101	 X
+0009	 SP
+0000	 PC
+0000	 CVZN
+6101	 and (ac) x
+0000
+********  test A     
+2101	 AC
+0000	 X
+0009	 SP
+0000	 PC
+0000	 CVZN
+6011	 and ac (x)
+0000
+********  test B     
+0000	 AC
+2101	 X
+0009	 SP
+0000	 PC
+0000	 CVZN
+5101	 or (ac) x
+0000
+********  test C     
+2101	 AC
+0000	 X
+0009	 SP
+0000	 PC
+0000	 CVZN
+5011	 or ac (x)
+0000
