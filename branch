@@ -1,0 +1,21 @@
+*** UNTESTED ***
+
+*** BHI  *** 
+ cond='ir158' value = 0 cond='ir5' value =1 cond='ir4' value =1 cond='ir3' value =1 cond='ir1' value =1 nst=400
+*** BEQ  *** 
+ cond='ir158' value = 0 cond='ibranch' value = 1 nst=400
+*** BNE  *** 
+ cond='ir158' value = 0 cond='ibranch' value = 1 nst=400
+*** BPL  *** 
+ cond='ir158' value = 0 cond='ibranch' value = 1 nst=400
+*** BMI  *** 
+ cond='ir158' value = 0 cond='ibranch' value = 1 nst=400
+*** BLS  ***  
+ cond='ir158' value = 0  cond='ir4' value =1 cond='ir3' value =1 cond='ir1' value =1 nst=400
+
+
+*** [PC] + offset -> PC***
+ st=400 rt='[pc]->t1' rac=1 rn=3 it1
+ st=401 rt='[src]+[dst]->q' oa rac=3 ib oadder newc newv
+ st=402 rt='[q]->pc' oq wac=1 wn=3 newz newn
+ 	 nst=0
